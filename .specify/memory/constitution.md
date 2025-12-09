@@ -1,50 +1,103 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
 
-## Core Principles
+- Version change: unspecified -> 1.0.0
+- Modified principles: Added focused principles for 代码质量, 测试标准, 用户体验一致性, 性能要求, 发布与可观测性
+- Added sections: 技术约束与合规, 开发工作流与质量门
+- Removed sections: none
+```markdown
+<!--
+同步影响报告
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+- 版本变更：未指定 -> 1.0.0
+- 修改原则：新增并聚焦于「代码质量」「测试标准」「用户体验一致性」「性能要求」「发布与可观测性」
+- 新增章节：技术约束与合规、开发工作流与质量门
+- 移除章节：无
+- 需要更新的模板：
+  - .specify/templates/plan-template.md ✅ 已更新
+  - .specify/templates/spec-template.md ✅ 已复核（无需修改）
+  - .specify/templates/tasks-template.md ✅ 已更新
+  - .specify/templates/commands/*.md ⚠ 需人工检查（可能不存在或含过时 agent 名称）
+- 后续待办：
+  - TODO(RATIFICATION_DATE)：原始批准日期未知，请补充
+  - 在 CI 中验证并启用新的质量门（lint、测试、性能回归等）
+-->
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+# TackleBox 宪法
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+## 核心原则
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 一、代码质量
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+代码必须清晰、可维护并易于审查。所有新提交与变更必须满足下列要求：
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+- 必须通过项目规定的静态分析与代码风格检查（例如 SwiftLint 等），CI 中的静态检查为强制质量门。
+- 变更需在 PR 说明中明确设计意图与替代方案权衡，复杂性增加必须说明原因与折衷。
+- 生产代码不得包含 TODO/临时修补类注释作为长期解决方案；关键行为必须有测试覆盖。
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+理由：高质量代码降低维护成本、减少生产故障并提升团队协作效率。
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### 二、测试标准（强制）
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+测试为强制性质量门。每个特性或修复必须至少包含下列测试类型（视场景选择）：
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+- 单元测试：覆盖核心业务逻辑与模块边界行为。
+- 集成测试：当变更涉及多组件交互或合同（contract）变更时必须包含。
+- UI/端到端测试：用户可见的关键路径与交互必须有自动化验证。
+- 测试优先：鼓励采用测试先行（TDD）流程；至少在实现前编写能失败的测试用例。
+- 覆盖与质量阈值：关键或安全/财务模块应达到项目规定的测试覆盖阈值（例如示例值 80%）；非关键模块应包含充分断言以验证业务行为。
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+理由：自动化测试是防止回归与保证设计正确性的基石，CI 中测试失败必须阻止合并。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### 三、用户体验一致性
+
+产品必须为用户提供一致、可访问与可预测的体验：
+
+- 优先使用设计系统或组件库，新 UI 元素需归入组件库并保留设计 tokens（颜色、间距、字号等）。
+- 可访问性（a11y）为最低要求，关键交互与文本内容应满足基本无障碍标准（例如键盘可操作、语义化标签、足够对比度）。
+- 本地化与国际化：面向多语言用户时必须使用本地化资源并避免硬编码文本。
+- 验收标准：每个用户故事的验收项中必须明确 UX 验证步骤（手动或自动化）并在 spec 中记录。
+
+理由：一致且可访问的 UX 提高用户满意度并减少支持成本。
+
+### 四、性能与可扩展性
+
+性能为重要的非功能性要求，所有特性在设计阶段必须声明性能目标与验证方案：
+
+- 性能预算：在 spec 中为相关特性声明性能目标（例如 p95 响应时间、内存上限或帧率目标）。
+- 基准与回归测试：对可能影响性能的改动，需在改动前后运行基准测试以确保未超出预算；CI 中应当包含关键性能回归检测（如适用）。
+- 优化原则：先测量再优化；性能问题必须通过度量与剖析定位后再实施优化。
+
+理由：明确的性能目标帮助早期发现架构问题并让优化工作更有依据。
+
+### 五、发布与可观测性
+
+系统在发布与运行时必须保持良好的可观测性与可回溯性：
+
+- 日志：关键路径与错误必须产生日志记录；服务端推荐使用结构化日志以便于聚合与分析。
+- 指标：需定义并采集业务与技术指标（如错误率、延迟、吞吐量），重要指标应接入监控与告警系统。
+- 回滚与兼容性：发布流程必须包含回滚策略；任何破坏向后兼容的变更在 PR 中必须标注并附带迁移指南。
+
+理由：可观测性是快速定位问题与保障系统可用性的基础。
+
+## 技术约束与合规
+
+- 依赖管理：第三方依赖在引入时必须在 PR 中声明并进行安全性与维护性评估；CI 应当执行依赖扫描以发现已知漏洞与许可证风险。
+- 隐私与安全：涉及个人数据的功能必须遵守适用的数据保护要求，并在 spec 中说明数据处理方式与保留期限。
+- 平台兼容性：针对目标平台（移动、桌面、浏览器等）的兼容性与最小支持版本必须在计划阶段声明。
+
+## 开发工作流与质量门
+
+- 所有 PR 在合并前必须通过：静态分析（lint）、单元与集成测试、代码审查（至少一位审阅者）、以及与变更相关的性能或 UX 验证（如适用）。
+- CI 失败必须阻止合并；仅在记录风险并经项目维护者明确批准的情况下允许临时绕过（并需事后补交缺失检查）。
+- 针对重大设计或兼容性变更，PR 中必须包含迁移计划与回滚策略。
+
+## 治理
+
+- 修订流程：对宪法的任何修改必须提交修订提案，说明变更理由、影响范围与迁移步骤；重大或破坏性变更需获得项目主要维护者批准并升级主版本号。
+- 版本策略：初始版本定为 `1.0.0`。后续变更遵循语义化版本：MAJOR（原则或破坏性变更）、MINOR（新增原则或重要扩展）、PATCH（措辞修正与澄清）。
+- 合规审查：建议在每个发布周期内至少进行一次宪法合规审查，重点核查 CI 门、测试覆盖与性能门的执行情况。
+
+**版本**：1.0.0  |  **批准日期**：TODO(RATIFICATION_DATE)（原始批准日期未知）  |  **最后修订**：2025-12-06
+
+```

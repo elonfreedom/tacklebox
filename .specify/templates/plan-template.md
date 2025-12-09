@@ -31,6 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
+The following gates are derived from the project constitution and MUST be verified before proceeding:
+
+- Lint & Static Analysis: the codebase MUST pass the project's lint/static analysis rules in CI.
+- Automated Tests: unit tests MUST pass; integration tests are REQUIRED for multi-component/contract changes.
+- UX Acceptance: for user-facing features, UX acceptance criteria from the spec MUST be satisfied (manual or automated checks).
+- Performance Budget: any feature with performance impact MUST declare a performance budget in `spec.md` and pass benchmark/regression checks.
+
 [Gates determined based on constitution file]
 
 ## Project Structure
