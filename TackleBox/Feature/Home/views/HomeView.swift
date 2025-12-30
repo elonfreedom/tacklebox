@@ -13,26 +13,7 @@ struct HomeView: View {
     NavigationStack {
       List {
         ForEach(items, id: \.id) { item in
-          HStack {
-            VStack(alignment: .leading) {
-              Text(item.name)
-                .font(.headline)
-
-              if let cat = item.category {
-                Text(cat)
-                  .font(.subheadline)
-                  .foregroundColor(.secondary)
-              }
-            }
-
-            Spacer()
-
-            Button(action: { viewModel.toggleEquip(item: item, context: modelContext) }) {
-              Image(systemName: item.isEquipped ? "checkmark.seal.fill" : "circle")
-                .foregroundColor(item.isEquipped ? .green : .secondary)
-            }
-          }
-          .padding(.vertical, 8)
+          ItemRow(item: item, viewModel: viewModel, modelContext: modelContext)
         }
         .onDelete { offsets in viewModel.delete(at: offsets, items: items, context: modelContext) }
       }
